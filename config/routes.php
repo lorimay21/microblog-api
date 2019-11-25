@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routes configuration
  *
@@ -17,6 +18,7 @@
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -92,13 +94,38 @@ Router::scope('/', function (RouteBuilder $routes) {
 });
 
 /**
- * If you need a different set of middleware or none at all,
- * open new scope and define routes there.
- *
- * ```
- * Router::scope('/api', function (RouteBuilder $routes) {
- *     // No $routes->applyMiddleware() here.
- *     // Connect API actions here.
- * });
- * ```
+ * API routes
  */
+Router::scope('/api', function (RouteBuilder $routes) {
+    /**
+     * User API routes
+     */
+    $routes->post('/users', ['controller' => 'Users', 'action' => 'register']); // Create users API
+    $routes->get('/users', ['controller' => 'Users', 'action' => 'index']); // Fetch user information API
+    $routes->put('/users', ['controller' => 'Users', 'action' => 'edit']); // Update user information API
+    $routes->delete('/users', ['controller' => 'Users', 'action' => 'terminate']); // Terminate user API
+    $routes->post('/login', ['controller' => 'Users', 'action' => 'login']); // Login user API
+    $routes->get('/logout', ['controller' => 'Users', 'action' => 'logout']); // Logout user API
+    $routes->post('/follow', ['controller' => 'Users', 'action' => 'follow']); // Follow user API
+    $routes->delete('/unfollow', ['controller' => 'Users', 'action' => 'unfollow']); // Unfollow user API
+
+    /**
+     * Post API routes
+     */
+    $routes->post('/posts', ['controller' => 'Posts', 'action' => 'create']); // Create post API
+    $routes->get('/posts', ['controller' => 'Posts', 'action' => 'index']); // Display all posts API
+    $routes->put('/posts', ['controller' => 'Posts', 'action' => 'edit']); // Update post API
+    $routes->delete('/posts', ['controller' => 'Posts', 'action' => 'delete']); // Delete post API
+    $routes->get('/view', ['controller' => 'Posts', 'action' => 'view']); // View post API
+    $routes->post('/like', ['controller' => 'Posts', 'action' => 'like']); // Like post API
+    $routes->delete('/unlike', ['controller' => 'Posts', 'action' => 'unlike']); // Unlike post API
+    $routes->post('/repost', ['controller' => 'Posts', 'action' => 'repost']); // Repost post API
+    $routes->delete('/unrepost', ['controller' => 'Posts', 'action' => 'unrepost']); // Unrepost post API
+
+    /**
+     * Comment API routes
+     */
+    $routes->post('/comments', ['controller' => 'Comments', 'action' => 'create']); // Add comment API
+    $routes->put('/comments', ['controller' => 'Comments', 'action' => 'edit']); // Edit comment API
+    $routes->delete('/comments', ['controller' => 'Comments', 'action' => 'delete']); // Delete comment API
+});
