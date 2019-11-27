@@ -2,8 +2,8 @@
 
 namespace App\Model\Table;
 
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
 
 /**
  * Users Model
@@ -22,40 +22,25 @@ class UsersTable extends Table
 
         $this->table('users');
 
+        $this->addBehavior('Timestamp');
+
         $this->hasMany('Posts', [
             'foreignKey' => 'user_id'
         ]);
     }
 
     /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
+     * build rules
+     * 
+     * @param Cake\ORM\RulesChecker $rules instance of a rule
+     * @return Cake\ORM\RulesChecker 
      */
-    public function validationDefault(Validator $validator)
+    public function buildRules(RulesChecker $rules)
     {
-        // $validator
-        //     ->nonNegativeInteger('id')
-        //     ->allowEmptyString('id', 'create');
+        $rules
+            ->add($rules->isUnique(['email'], 'Email Address is already used'))
+            ->add($rules->isUnique(['username'], 'Username is already used'));
 
-        // $validator
-        //     ->scalar('password')
-        //     ->requirePresence('password', 'create')
-        //     ->allowEmptyString('password', false);
-
-        // $validator
-        //     ->email('email')
-        //     ->allowEmptyString('email');
-
-        // $validator
-        //     ->integer('send_mail_flag')
-        //     ->allowEmptyString('send_mail_flag');
-
-        // $validator
-        //     ->scalar('login_key')
-        //     ->allowEmptyString('login_key');
-
-        // return $validator;
+        return $rules;
     }
 }

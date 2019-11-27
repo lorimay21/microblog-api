@@ -59,7 +59,7 @@ class CreateUsers extends AbstractMigration
             'null' => false
         ]);
         $table->addColumn('image', 'string', [
-            'default' => '/img/users/default.png',
+            'default' => '/img/uploads/users/default.png',
             'limit' => 255,
             'null' => true
         ]);

@@ -18,7 +18,7 @@ class CreateFollows extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addColumn('following_id', 'integer', [
+        $table->addColumn('follow_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,

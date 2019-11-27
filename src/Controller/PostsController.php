@@ -2,16 +2,37 @@
 
 namespace App\Controller;
 
-use Cake\Core\Configure;
-use Cake\Http\Exception\ForbiddenException;
-use Cake\Http\Exception\NotFoundException;
-use Cake\View\Exception\MissingTemplateException;
+use App\Controller\AppController;
+use App\Model\Validation\ImageValidator;
+use App\Model\Validation\LikeIdValidator;
+use App\Model\Validation\PostContentValidator;
+use App\Model\Validation\PostIdValidator;
+use App\Model\Validation\PostTitleValidator;
+use App\Model\Validation\UserIdValidator;
+use Cake\Validation\Validator;
 
 /**
  * PostsController
+ * 
+ * @property Posts $Posts
  */
 class PostsController extends AppController
 {
+    /**
+     * initialize function
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadModel('Likes');
+        $this->loadModel('Posts');
+        $this->loadModel('Reposts');
+        $this->loadModel('Users');
+    }
+
     /**
      * Display all posts / user's posts API
      * 
@@ -20,7 +41,37 @@ class PostsController extends AppController
      */
     public function index()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('get')) {
+            $data = $this->request->query;
+
+            $validator = new Validator();
+            $postIdValidator = new PostIdValidator();
+            $userIdValidator = new UserIdValidator();
+
+            $validator = $postIdValidator->notRequired($validator);
+            $validator = $userIdValidator->notRequired($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $posts = $this->Posts->find()
+                ->contain('Users');
+
+            if (isset($data['post_id'])) {
+                $posts->where(['id' => $data['post_id']]);
+            }
+            if (isset($data['user_id'])) {
+                $posts->where(['user_id' => $data['user_id']]);
+            }
+
+            $response = $this->Rest->setSuccessResponse($posts->toArray());
+        }
+
+        return $response;
     }
 
     /**
@@ -31,7 +82,59 @@ class PostsController extends AppController
      */
     public function create()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+
+            $validator = new Validator();
+            $userIdValidator = new UserIdValidator();
+            $postTitleValidator = new PostTitleValidator();
+            $postContentValidator = new PostContentValidator();
+            $imageValidator = new ImageValidator();
+
+            $validator = $userIdValidator->validationDefault($validator);
+            $validator = $postTitleValidator->validationDefault($validator);
+            $validator = $postContentValidator->validationDefault($validator);
+            $validator = $imageValidator->validationDefault($validator);
+
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isExists = $this->Posts->exists(['id' => $data['user_id']]);
+
+            if ($isExists) {
+                try {
+                    $post = $this->Posts->newEntity();
+
+                    $post->user_id = $data['user_id'];
+                    $post->title = $data['title'];
+                    $post->content = $data['content'];
+
+                    $this->Posts->save($post);
+
+                    // if (!empty($data['image'])) {
+                    //     $img = explode('.', $data['image']);
+
+                    //     $imagePath = '/img/uploads/posts/' . $post->id . '/';
+                    //     $imageName = $img[0] . '_' . date('YmdHis') . '.' . $img[1];
+                    //     $image = $imagePath . $imageName;
+
+                    //     $post->image = $image;
+                    //     $this->Posts->save($post);
+                    // }
+
+                    $response = $this->Rest->setSuccessResponse($post);
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -42,7 +145,50 @@ class PostsController extends AppController
      */
     public function edit()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('put')) {
+            $data = $this->request->data;
+
+            $validator = new Validator();
+            $postIdValidator = new PostIdValidator();
+            $postTitleValidator = new PostTitleValidator();
+            $postContentValidator = new PostContentValidator();
+            $imageValidator = new ImageValidator();
+
+            $validator = $postIdValidator->validationDefault($validator);
+            $validator = $postTitleValidator->notRequired($validator);
+            $validator = $postContentValidator->notRequired($validator);
+            $validator = $imageValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isExists = $this->Posts->exists(['id' => $data['post_id']]);
+
+            if ($isExists) {
+                try {
+                    $post = $this->Posts->get($data['post_id']);
+
+                    if (isset($data['title'])) {
+                        $post->title = $data['title'];
+                    }
+                    if (isset($data['content'])) {
+                        $post->content = $data['content'];
+                    }
+
+                    $this->Posts->save($post);
+
+                    $response = $this->Rest->setSuccessResponse($post);
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -53,7 +199,36 @@ class PostsController extends AppController
      */
     public function delete()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('delete')) {
+            $data = $this->request->query;
+
+            $validator = new Validator();
+            $idValidator = new PostIdValidator();
+
+            $validator = $idValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isExists = $this->Users->exists(['id' => $data['post_id']]);
+
+            if ($isExists) {
+                try {
+                    $post = $this->Posts->get($data['post_id']);
+                    $this->Posts->delete($post);
+
+                    $response = $this->Rest->setSuccessResponse([], 'Post has been deleted');
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -64,7 +239,29 @@ class PostsController extends AppController
      */
     public function view()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('get')) {
+            $data = $this->request->query;
+
+            $validator = new Validator();
+            $idValidator = new PostIdValidator();
+
+            $validator = $idValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $post = $this->Posts->find()
+                ->where(['id' => $data['post_id']])
+                ->toArray();
+
+            $response = $this->Rest->setSuccessResponse($post);
+        }
+
+        return $response;
     }
 
     /**
@@ -75,7 +272,45 @@ class PostsController extends AppController
      */
     public function like()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+
+            $validator = new Validator();
+            $postIdValidator = new PostIdValidator();
+            $userIdValidator = new UserIdValidator();
+
+            $validator = $postIdValidator->validationDefault($validator);
+            $validator = $userIdValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isLiked = $this->Likes->exists([
+                'user_id' => $data['user_id'],
+                'post_id' => $data['post_id']
+            ]);
+
+            if (!$isLiked) {
+                try {
+                    $like = $this->Likes->newEntity();
+
+                    $like->user_id = $data['user_id'];
+                    $like->post_id = $data['post_id'];
+
+                    $this->Likes->save($like);
+
+                    $response = $this->Rest->setSuccessResponse([], 'Post has been liked');
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -86,7 +321,36 @@ class PostsController extends AppController
      */
     public function unlike()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('delete')) {
+            $data = $this->request->query;
+
+            $validator = new Validator();
+            $idValidator = new LikeIdValidator();
+
+            $validator = $idValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isExists = $this->Users->exists(['id' => $data['like_id']]);
+
+            if ($isExists) {
+                try {
+                    $like = $this->Likes->get($data['like_id']);
+                    $this->Likes->delete($like);
+
+                    $response = $this->Rest->setSuccessResponse([], 'Post has been unliked');
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -97,7 +361,45 @@ class PostsController extends AppController
      */
     public function repost()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+
+            $validator = new Validator();
+            $postIdValidator = new PostIdValidator();
+            $userIdValidator = new UserIdValidator();
+
+            $validator = $postIdValidator->validationDefault($validator);
+            $validator = $userIdValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isReposted = $this->Reposts->exists([
+                'user_id' => $data['user_id'],
+                'post_id' => $data['post_id']
+            ]);
+
+            if (!$isReposted) {
+                try {
+                    $repost = $this->Reposts->newEntity();
+
+                    $repost->user_id = $data['user_id'];
+                    $repost->post_id = $data['post_id'];
+
+                    $this->Reposts->save($repost);
+
+                    $response = $this->Rest->setSuccessResponse([], 'Post has been reposted');
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -108,6 +410,35 @@ class PostsController extends AppController
      */
     public function unrepost()
     {
-        //
+        $response = $this->Rest->setBadRequestResponse();
+
+        if ($this->request->is('delete')) {
+            $data = $this->request->query;
+
+            $validator = new Validator();
+            $idValidator = new RepostIdValidator();
+
+            $validator = $idValidator->validationDefault($validator);
+            $errors = $validator->errors($data);
+
+            if ($errors) {
+                return $this->Rest->setUnprocessedResponse($errors);
+            }
+
+            $isExists = $this->Users->exists(['id' => $data['repost_id']]);
+
+            if ($isExists) {
+                try {
+                    $repost = $this->Reposts->get($data['repost_id']);
+                    $this->Reposts->delete($repost);
+
+                    $response = $this->Rest->setSuccessResponse([], 'Post has been unreposted');
+                } catch (Exception $e) {
+                    $response = $this->Rest->setErrorResponse($e);
+                }
+            }
+        }
+
+        return $response;
     }
 }

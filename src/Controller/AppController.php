@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,6 +13,7 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller;
 
 use Cake\Controller\Controller;
@@ -23,7 +25,9 @@ use Cake\Event\Event;
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
+ * @property Flash $Flash
+ * @property RequestHandler $RequestHandler
+ * @property Rest $Rest
  */
 class AppController extends Controller
 {
@@ -41,10 +45,26 @@ class AppController extends Controller
     {
         parent::initialize();
 
+        /** Components */
+        // $this->loadComponent('Auth', [
+        //     'authenticate' => [
+        //         'Form' => [
+        //             'fields' => [
+        //                 'email' => 'email',
+        //                 'password' => 'password'
+        //             ]
+        //         ]
+        //     ],
+        //     'storage' => 'Session'
+        // ]);
+
+        $this->loadComponent('Flash');
+
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
-        $this->loadComponent('Flash');
+
+        $this->loadComponent('Rest');
 
         /*
          * Enable the following component for recommended CakePHP security settings.
