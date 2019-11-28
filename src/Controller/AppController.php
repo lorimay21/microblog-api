@@ -45,24 +45,13 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        /** Components */
-        // $this->loadComponent('Auth', [
-        //     'authenticate' => [
-        //         'Form' => [
-        //             'fields' => [
-        //                 'email' => 'email',
-        //                 'password' => 'password'
-        //             ]
-        //         ]
-        //     ],
-        //     'storage' => 'Session'
-        // ]);
-
         $this->loadComponent('Flash');
 
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
+
+        $this->loadComponent('ResponseBuilder');
 
         $this->loadComponent('Rest');
 

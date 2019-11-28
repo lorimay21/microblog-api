@@ -1,0 +1,122 @@
+msgid "USER_ID_REQUIRED"
+msgstr "User ID is required"
+
+msgid "USER_ID_INVALID_TYPE"
+msgstr "User ID must be a positive integer"
+
+msgid "USER_FIRSTNAME_REQUIRED"
+msgstr "Firstname is required"
+
+msgid "USER_FIRSTNAME_MAX_LENGTH"
+msgstr "Firstname must not be greater than 250 characters"
+
+msgid "USER_LASTNAME_REQUIRED"
+msgstr "Lastname is required"
+
+msgid "USER_LASTNAME_MAX_LENGTH"
+msgstr "Lastname must not be greater than 250 characters"
+
+msgid "USER_USERNAME_REQUIRED"
+msgstr "Username is required"
+
+msgid "USER_USERNAME_MAX_LENGTH"
+msgstr "Username must not be greater than 250 characters"
+
+msgid "USER_USERNAME_UNIQUE"
+msgstr "Username is already used"
+
+msgid "USER_PASSWORD_REQUIRED"
+msgstr "Password is required"
+
+msgid "USER_PASSWORD_LENGTH"
+msgstr "Password must be more than 8 characters"
+
+msgid "USER_PASSWORD_SYNTAX"
+msgstr "Password must be a combination of alphanumeric characters and symbols"
+
+msgid "USER_CONFIRMPASSWORD_REQUIRED"
+msgstr "Confirm Password is required"
+
+msgid "USER_CONFIRMPASSWORD_LENGTH"
+msgstr "Confirm Password must be more than 8 characters"
+
+msgid "USER_CONFIRMPASSWORD_SYNTAX"
+msgstr "Confirm Password must be a combination of alphanumeric characters and symbols"
+
+msgid "USER_CONFIRMPASSWORD_MATCH"
+msgstr "Passwords do not match"
+
+msgid "USER_EMAIL_REQUIRED"
+msgstr "Email Address is required"
+
+msgid "USER_EMAIL_VALID"
+msgstr "Email Address is invalid"
+
+msgid "USER_EMAIL_UNIQUE"
+msgstr "Email Address is already used"
+
+msgid "USER_GENDER_INVALID_TYPE"
+msgstr "Gender must be a positive integer"
+
+msgid "USER_GENDER_VALID"
+msgstr "Gender must be either 1 for Male or 2 for Female only"
+
+msgid "USER_BIRTHDAY_REQUIRED"
+msgstr "Birthday is required"
+
+msgid "USER_BIRTHDAY_VALID"
+msgstr "Birthday must be a valid date"
+
+msgid "IMAGE_VALID"
+msgstr "image must be a valid image file"
+
+msgid "IMAGE_SIZE"
+msgstr "image must not be greater than 5mb"
+
+msgid "POST_ID_REQUIRED"
+msgstr "Post ID is required"
+
+msgid "POST_ID_INVALID_TYPE"
+msgstr "Post ID must be a positive integer"
+
+msgid "POST_TITLE_REQUIRED"
+msgstr "Post title cannot be empty"
+
+msgid "POST_TITLE_MAX_LENGTH"
+msgstr "Maximum of 250 characters only"
+
+msgid "POST_CONTENT_REQUIRED"
+msgstr "Post content cannot be empty"
+
+msgid "POST_CONTENT_MAX_LENGTH"
+msgstr "Maximum of 500 characters only"
+
+msgid "COMMENT_ID_REQUIRED"
+msgstr "Comment ID is required"
+
+msgid "COMMENT_ID_INVALID_TYPE"
+msgstr "Comment ID must be a positive integer"
+
+msgid "COMMENT_CONTENT_REQUIRED"
+msgstr "Comment cannot be empty"
+
+msgid "COMMENT_CONTENT_MAX_LENGTH"
+msgstr "Maximum of 500 characters only"
+
+msgid "FOLLOW_ID_REQUIRED"
+msgstr "Follow ID is required"
+
+msgid "FOLLOW_ID_INVALID_TYPE"
+msgstr "Follow ID must be a positive integer"
+
+msgid "LIKE_ID_REQUIRED"
+msgstr "Like ID is required"
+
+msgid "LIKE_ID_INVALID_TYPE"
+msgstr "Like ID must be a positive integer"
+
+msgid "REPOST_ID_REQUIRED"
+msgstr "Repost ID is required"
+
+msgid "REPOST_ID_INVALID_TYPE"
+msgstr "Repost ID must be a positive integer"

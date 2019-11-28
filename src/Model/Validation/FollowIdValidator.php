@@ -15,11 +15,11 @@ class FollowIdValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('follow_id', true, 'Follow ID is required')
+            ->requirePresence('follow_id', true, 'FOLLOW_ID_REQUIRED')
             ->add('follow_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Follow ID must be a positive integer'
+                    'message' => 'FOLLOW_ID_INVALID_TYPE'
                 ]
             ]);
 

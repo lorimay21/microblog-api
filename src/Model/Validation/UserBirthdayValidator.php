@@ -15,11 +15,11 @@ class UserBirthdayValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('birthday', true, 'Birthday is required')
+            ->requirePresence('birthday', true, 'USER_BIRTHDAY_REQUIRED')
             ->add('birthday', [
                 'valid' => [
                     'rule' => ['date'],
-                    'message' => 'Birthday must be in Y-m-d format'
+                    'message' => 'USER_BIRTHDAY_VALID'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class UserBirthdayValidator extends Validator
             ->add('birthday', [
                 'valid' => [
                     'rule' => ['date'],
-                    'message' => 'Birthday must be in Y-m-d format'
+                    'message' => 'USER_BIRTHDAY_VALID'
                 ]
             ]);
 

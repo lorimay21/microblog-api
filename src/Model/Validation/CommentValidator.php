@@ -15,11 +15,11 @@ class CommentValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('comment', true, 'Comment cannot be empty')
+            ->requirePresence('comment', true, 'COMMENT_CONTENT_REQUIRED')
             ->add('comment', [
                 'length' => [
                     'rule' => ['maxLength', 500],
-                    'message' => 'Maximum of 500 characters only'
+                    'message' => 'COMMENT_CONTENT_MAX_LENGTH'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class CommentValidator extends Validator
             ->add('comment', [
                 'length' => [
                     'rule' => ['maxLength', 500],
-                    'message' => 'Maximum of 500 characters only'
+                    'message' => 'COMMENT_CONTENT_MAX_LENGTH'
                 ]
             ]);
 

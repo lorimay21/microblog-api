@@ -3,17 +3,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Validation\ImageValidator;
-use App\Model\Validation\FollowIdValidator;
-use App\Model\Validation\UserBirthdayValidator;
-use App\Model\Validation\UserConfirmPasswordValidator;
-use App\Model\Validation\UserEmailValidator;
-use App\Model\Validation\UserFirstnameValidator;
-use App\Model\Validation\UserGenderValidator;
-use App\Model\Validation\UserIdValidator;
-use App\Model\Validation\UserLastnameValidator;
-use App\Model\Validation\UserPasswordValidator;
-use App\Model\Validation\UserUsernameValidator;
+use App\Form\CommonIdForm;
+use App\Form\UserRegistrationForm;
+use App\Form\UserUpdateForm;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Validation\Validator;
 
@@ -50,11 +42,12 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            // build validators
-            $validator = $this->build_create_user_validators();
+            // set form validators
+            $registerForm = new UserRegistrationForm();
+            $registerForm->validate($data);
 
             // get validation errors
-            $errors = $validator->errors($data);
+            $errors = $registerForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -109,12 +102,11 @@ class UsersController extends AppController
         if ($this->request->is('get')) {
             $data = $this->request->query;
 
-            // set validators
-            $validator = new Validator();
-            $idValidator = new UserIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdRequired(new Validator());
 
-            // get validation errors
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -122,7 +114,10 @@ class UsersController extends AppController
             }
 
             $user = $this->Users->find()
-                ->where(['id' => $data['user_id']])
+                ->where(['Users.id' => $data['user_id']])
+                ->contain([
+                    'Posts' => ['Comments']
+                ])
                 ->first();
 
             $response = $this->Rest->setSuccessResponse($user);
@@ -144,11 +139,12 @@ class UsersController extends AppController
         if ($this->request->is('put')) {
             $data = $this->request->data;
 
-            // build validators
-            $validator = $this->build_edit_user_validators();
+            // set form validators
+            $updateForm = new UserUpdateForm();
+            $updateForm->validate($data);
 
             // get validation errors
-            $errors = $validator->errors($data);
+            $errors = $updateForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -214,12 +210,11 @@ class UsersController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            // set validators
-            $validator = new Validator();
-            $idValidator = new UserIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdRequired(new Validator());
 
-            // get validation errors
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -298,14 +293,11 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            // set validators
-            $validator = new Validator();
-            $userIdValidator = new UserIdValidator();
-            $followIdValidator = new FollowIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdandFollowIdRequired(new Validator());
 
-            // get validation errors
-            $validator = $userIdValidator->validationDefault($validator);
-            $validator = $followIdValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -349,12 +341,11 @@ class UsersController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            // set validators
-            $validator = new Validator();
-            $idValidator = new FollowIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->followIdRequired(new Validator());
 
-            // get validation errors
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -376,70 +367,6 @@ class UsersController extends AppController
         }
 
         return $response;
-    }
-
-    /**
-     * Build reusable validators
-     * 
-     * @return object $validator
-     */
-    private function build_create_user_validators()
-    {
-        // set validators
-        $validator = new Validator();
-        $firstnameValidator = new UserFirstnameValidator();
-        $lastnameValidator = new UserLastnameValidator();
-        $usernameValidator = new UserUsernameValidator();
-        $emailValidator = new UserEmailValidator();
-        $passwordValidator = new UserPasswordValidator();
-        $confirmPassValidator = new UserConfirmPasswordValidator();
-        $birthdayValidator = new UserBirthdayValidator();
-        $genderValidator = new UserGenderValidator();
-        $imageValidator = new ImageValidator();
-
-        // get validators
-        $validator = $firstnameValidator->validationDefault($validator);
-        $validator = $lastnameValidator->validationDefault($validator);
-        $validator = $usernameValidator->validationDefault($validator);
-        $validator = $emailValidator->validationDefault($validator);
-        $validator = $passwordValidator->validationDefault($validator);
-        $validator = $confirmPassValidator->validationDefault($validator);
-        $validator = $birthdayValidator->validationDefault($validator);
-        $validator = $genderValidator->validationDefault($validator);
-        $validator = $imageValidator->validationDefault($validator);
-
-        return $validator;
-    }
-
-    /**
-     * Build reusable validators
-     * 
-     * @return object $validator
-     */
-    private function build_edit_user_validators()
-    {
-        // set validators
-        $validator = new Validator();
-        $userIdValidator = new UserIdValidator();
-        $firstnameValidator = new UserFirstnameValidator();
-        $lastnameValidator = new UserLastnameValidator();
-        $usernameValidator = new UserUsernameValidator();
-        $emailValidator = new UserEmailValidator();
-        $birthdayValidator = new UserBirthdayValidator();
-        $genderValidator = new UserGenderValidator();
-        $imageValidator = new ImageValidator();
-
-        // get validators
-        $validator = $userIdValidator->validationDefault($validator);
-        $validator = $firstnameValidator->notRequired($validator);
-        $validator = $lastnameValidator->notRequired($validator);
-        $validator = $usernameValidator->notRequired($validator);
-        $validator = $emailValidator->notRequired($validator);
-        $validator = $birthdayValidator->notRequired($validator);
-        $validator = $genderValidator->validationDefault($validator);
-        $validator = $imageValidator->validationDefault($validator);
-
-        return $validator;
     }
 
     /**

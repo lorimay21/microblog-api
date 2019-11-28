@@ -15,18 +15,18 @@ class UserConfirmPasswordValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('confirm_password', true, 'Confirm password is required')
+            ->requirePresence('confirm_password', true, 'USER_CONFIRMPASSWORD_REQUIRED')
             ->add('confirm_password', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Confirm password must not be greater than 250 characters'
+                    'message' => 'USER_CONFIRMPASSWORD_LENGTH'
                 ],
                 'syntax' => [
                     'rule' => ['custom', '/^[A-Za-z0-9_@.,#&+-]*$/i'],
-                    'message' => 'Confirm password must be a combination of alphanumeric characters and symbols'
+                    'message' => 'USER_CONFIRMPASSWORD_SYNTAX'
                 ]
             ])
-            ->sameAs('confirm_password', 'password', 'Passwords do not match');
+            ->sameAs('confirm_password', 'password', 'USER_CONFIRMPASSWORD_MATCH');
 
         return $validator;
     }

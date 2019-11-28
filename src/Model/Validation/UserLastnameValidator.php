@@ -15,11 +15,11 @@ class UserLastnameValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('lastname', true, 'Lastname is required')
+            ->requirePresence('lastname', true, 'USER_LASTNAME_REQUIRED')
             ->add('lastname', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Lastname must not be greater than 250 characters'
+                    'message' => 'USER_LASTNAME_MAX_LENGTH'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class UserLastnameValidator extends Validator
             ->add('lastname', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Lastname must not be greater than 250 characters'
+                    'message' => 'USER_LASTNAME_MAX_LENGTH'
                 ]
             ]);
 

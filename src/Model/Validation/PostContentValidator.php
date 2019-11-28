@@ -15,11 +15,11 @@ class PostContentValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('content', true, 'Post content cannot be empty')
+            ->requirePresence('content', true, 'POST_CONTENT_REQUIRED')
             ->add('content', [
                 'length' => [
                     'rule' => ['maxLength', 500],
-                    'message' => 'Maximum of 500 characters only'
+                    'message' => 'POST_CONTENT_MAX_LENGTH'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class PostContentValidator extends Validator
             ->add('content', [
                 'length' => [
                     'rule' => ['maxLength', 500],
-                    'message' => 'Maximum of 500 characters only'
+                    'message' => 'POST_CONTENT_MAX_LENGTH'
                 ]
             ]);
 

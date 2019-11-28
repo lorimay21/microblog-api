@@ -15,11 +15,11 @@ class PostIdValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('post_id', true, 'Post ID is required')
+            ->requirePresence('post_id', true, 'POST_ID_REQUIRED')
             ->add('post_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Post ID must be a positive integer'
+                    'message' => 'POST_ID_INVALID_TYPE'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class PostIdValidator extends Validator
             ->add('post_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Post ID must be a positive integer'
+                    'message' => 'POST_ID_INVALID_TYPE'
                 ]
             ]);
 

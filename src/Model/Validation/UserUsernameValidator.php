@@ -15,11 +15,11 @@ class UserUsernameValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('username', true, 'Username is required')
+            ->requirePresence('username', true, 'USER_USERNAME_REQUIRED')
             ->add('username', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Username must not be greater than 250 characters'
+                    'message' => 'USER_USERNAME_MAX_LENGTH'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class UserUsernameValidator extends Validator
             ->add('username', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Username must not be greater than 250 characters'
+                    'message' => 'USER_USERNAME_MAX_LENGTH'
                 ]
             ]);
 

@@ -15,15 +15,15 @@ class UserPasswordValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('password', true, 'Password is required')
+            ->requirePresence('password', true, 'USER_PASSWORD_REQUIRED')
             ->add('password', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Password must not be greater than 250 characters'
+                    'message' => 'USER_PASSWORD_LENGTH'
                 ],
                 'alphanumeric' => [
                     'rule' => ['custom', '/^[A-Za-z0-9_@.,#&+-]*$/i'],
-                    'message' => 'Password must be a combination of alphanumeric characters and symbols'
+                    'message' => 'USER_PASSWORD_SYNTAX'
                 ]
             ]);
 

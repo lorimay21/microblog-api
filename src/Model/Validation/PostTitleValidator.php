@@ -15,11 +15,11 @@ class PostTitleValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('title', true, 'Post title cannot be empty')
+            ->requirePresence('title', true, 'POST_TITLE_REQUIRED')
             ->add('title', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Maximum of 250 characters only'
+                    'message' => 'POST_TITLE_MAX_LENGTH'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class PostTitleValidator extends Validator
             ->add('title', [
                 'length' => [
                     'rule' => ['maxLength', 250],
-                    'message' => 'Maximum of 250 characters only'
+                    'message' => 'POST_TITLE_MAX_LENGTH'
                 ]
             ]);
 

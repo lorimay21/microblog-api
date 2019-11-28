@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Validation\CommentIdValidator;
-use App\Model\Validation\CommentValidator;
-use App\Model\Validation\PostIdValidator;
-use App\Model\Validation\ImageValidator;
+use App\Form\CommentCreateForm;
+use App\Form\CommentUpdateForm;
+use App\Form\CommonIdForm;
 use Cake\Validation\Validator;
 
 /**
@@ -42,15 +41,12 @@ class CommentsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $postIdValidator = new PostIdValidator();
-            $commentValidator = new CommentValidator();
-            $imageValidator = new ImageValidator();
+            // build form validators
+            $createForm = new CommentCreateForm();
+            $createForm->execute($data);
 
-            $validator = $postIdValidator->validationDefault($validator);
-            $validator = $commentValidator->validationDefault($validator);
-            $validator = $imageValidator->validationDefault($validator);
-            $errors = $validator->errors($data);
+            // get error validations
+            $errors = $createForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -90,15 +86,12 @@ class CommentsController extends AppController
         if ($this->request->is('put')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $commentIdValidator = new CommentIdValidator();
-            $commentValidator = new CommentValidator();
-            $imageValidator = new ImageValidator();
+            // build form validators
+            $updateForm = new CommentUpdateForm();
+            $updateForm->execute($data);
 
-            $validator = $commentIdValidator->validationDefault($validator);
-            $validator = $commentValidator->notRequired($validator);
-            $validator = $imageValidator->validationDefault($validator);
-            $errors = $validator->errors($data);
+            // get validation errors
+            $errors = $updateForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -139,10 +132,11 @@ class CommentsController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $idValidator = new CommentIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->commentIdRequired(new Validator());
 
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {

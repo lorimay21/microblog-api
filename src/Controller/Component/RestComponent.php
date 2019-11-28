@@ -8,6 +8,7 @@ use Cake\Controller\Component;
  * Rest component
  *
  * @property RequestHandlerComponent $RequestHandler
+ * @property ResponseBuilderComponent $ResponseBuilder
  */
 class RestComponent extends Component
 {
@@ -17,7 +18,8 @@ class RestComponent extends Component
      * @var array
      */
     public $components = [
-        'RequestHandler'
+        'RequestHandler',
+        'ResponseBuilder'
     ];
 
     /**
@@ -107,7 +109,7 @@ class RestComponent extends Component
         $messageId = 'UNPROCESSED_ENTITY_ERROR';
         $message = 'Invalid parameters';
 
-        $data = $this->build_data($data);
+        $data = $this->ResponseBuilder->buildData($data);
 
         return $this->setResponse(422, $data, $messageId, $message);
     }
@@ -159,28 +161,5 @@ class RestComponent extends Component
         }
 
         return $this->RequestHandler->renderAs($controller, 'json');
-    }
-
-    /**
-     * Reconstruct return data
-     *
-     * @param array $data Response data
-     * @return array $data
-     */
-    private function build_data($data)
-    {
-        $responseData = [];
-
-        foreach ($data as $key => $value) {
-            foreach ($value as $message) {
-                $responseData[] = [
-                    'field_name' => $key,
-                    // 'message_id' => 'test',
-                    'message' => $message
-                ];
-            }
-        }
-
-        return $responseData;
     }
 }

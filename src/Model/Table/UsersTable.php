@@ -38,8 +38,8 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules
-            ->add($rules->isUnique(['email'], 'Email Address is already used'))
-            ->add($rules->isUnique(['username'], 'Username is already used'));
+            ->add($rules->isUnique(['email'], 'USER_EMAIL_UNIQUE'))
+            ->add($rules->isUnique(['username'], 'USER_USERNAME_UNIQUE'));
 
         return $rules;
     }

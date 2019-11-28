@@ -15,11 +15,11 @@ class RepostIdValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('repost_id', true, 'Repost ID is required')
+            ->requirePresence('repost_id', true, 'REPOST_ID_REQUIRED')
             ->add('repost_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Repost ID must be a positive integer'
+                    'message' => 'REPOST_ID_INVALID_TYPE'
                 ]
             ]);
 

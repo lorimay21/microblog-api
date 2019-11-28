@@ -19,7 +19,7 @@ class CommentIdValidator extends Validator
             ->add('comment_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Comment ID must be a positive integer'
+                    'message' => 'COMMENT_ID_REQUIRED'
                 ]
             ]);
 

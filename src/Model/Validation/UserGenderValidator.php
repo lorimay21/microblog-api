@@ -19,11 +19,11 @@ class UserGenderValidator extends Validator
             ->add('gender', [
                 'type' => [
                     'rule' => 'numeric',
-                    'message' => 'Gender must be a positive integer'
+                    'message' => 'USER_GENDER_INVALID_TYPE'
                 ],
                 'valid' => [
                     'rule' => ['inList', [1, 2]],
-                    'message' => 'Gender must be either 1 for Male or 2 for Female only'
+                    'message' => 'USER_GENDER_VALID'
                 ]
             ]);
 

@@ -15,11 +15,11 @@ class UserIdValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('user_id', true, 'User ID is required')
+            ->requirePresence('user_id', true, 'USER_ID_REQUIRED')
             ->add('user_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'User ID must be a positive integer'
+                    'message' => 'USER_ID_INVALID_TYPE'
                 ]
             ]);
 
@@ -39,7 +39,7 @@ class UserIdValidator extends Validator
             ->add('user_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'User ID must be a positive integer'
+                    'message' => 'USER_ID_INVALID_TYPE'
                 ]
             ]);
 

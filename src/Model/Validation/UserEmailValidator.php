@@ -15,15 +15,11 @@ class UserEmailValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('email', true, 'Email Address is required')
+            ->requirePresence('email', true, 'USER_EMAIL_REQUIRED')
             ->add('email', [
-                'length' => [
-                    'rule' => ['maxLength', 250],
-                    'message' => 'Email Address must not be greater than 250 characters'
-                ],
                 'valid' => [
                     'rule' => ['email'],
-                    'message' => 'Email Address is invalid'
+                    'message' => 'USER_EMAIL_VALID'
                 ]
             ]);
 
@@ -41,13 +37,9 @@ class UserEmailValidator extends Validator
         $validator
             ->allowEmptyString('email')
             ->add('email', [
-                'length' => [
-                    'rule' => ['maxLength', 250],
-                    'message' => 'Email Address must not be greater than 250 characters'
-                ],
                 'valid' => [
                     'rule' => ['email'],
-                    'message' => 'Email Address is invalid'
+                    'message' => 'USER_EMAIL_VALID'
                 ],
             ]);
 

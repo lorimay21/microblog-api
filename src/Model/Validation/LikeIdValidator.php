@@ -15,11 +15,11 @@ class LikeIdValidator extends Validator
     public function validationDefault($validator)
     {
         $validator
-            ->requirePresence('like_id', true, 'Like ID is required')
+            ->requirePresence('like_id', true, 'LIKE_ID_REQUIRED')
             ->add('like_id', [
                 'type' => [
                     'rule' => ['numeric'],
-                    'message' => 'Like ID must be a positive integer'
+                    'message' => 'LIKE_ID_INVALID_TYPE'
                 ]
             ]);
 

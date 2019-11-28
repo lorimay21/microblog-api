@@ -19,11 +19,11 @@ class ImageValidator extends Validator
             ->add('image', [
                 'filetype' => [
                     'rule' => ['extension'],
-                    'message' => 'Image must be a valid image'
+                    'message' => 'IMAGE_VALID'
                 ],
                 // 'size' => [
                 //     'rule' => ['fileSize', '<=', '5MB'],
-                //     'message' => 'Image must be greater than 5MB'
+                //     'message' => 'IMAGE_SIZE'
                 // ]
             ]);
 

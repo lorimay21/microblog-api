@@ -3,12 +3,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Validation\ImageValidator;
-use App\Model\Validation\LikeIdValidator;
-use App\Model\Validation\PostContentValidator;
-use App\Model\Validation\PostIdValidator;
-use App\Model\Validation\PostTitleValidator;
-use App\Model\Validation\UserIdValidator;
+use App\Form\CommonIdForm;
+use App\Form\PostCreateForm;
 use Cake\Validation\Validator;
 
 /**
@@ -46,12 +42,11 @@ class PostsController extends AppController
         if ($this->request->is('get')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $postIdValidator = new PostIdValidator();
-            $userIdValidator = new UserIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdAndPostIdNotRequired(new Validator());
 
-            $validator = $postIdValidator->notRequired($validator);
-            $validator = $userIdValidator->notRequired($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -59,13 +54,13 @@ class PostsController extends AppController
             }
 
             $posts = $this->Posts->find()
-                ->contain('Users');
+                ->contain(['Users', 'Comments']);
 
             if (isset($data['post_id'])) {
-                $posts->where(['id' => $data['post_id']]);
+                $posts->where(['Posts.id' => $data['post_id']]);
             }
             if (isset($data['user_id'])) {
-                $posts->where(['user_id' => $data['user_id']]);
+                $posts->where(['Posts.user_id' => $data['user_id']]);
             }
 
             $response = $this->Rest->setSuccessResponse($posts->toArray());
@@ -87,18 +82,12 @@ class PostsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $userIdValidator = new UserIdValidator();
-            $postTitleValidator = new PostTitleValidator();
-            $postContentValidator = new PostContentValidator();
-            $imageValidator = new ImageValidator();
+            // set form validators
+            $createForm = new PostCreateForm();
+            $createForm->execute($data);
 
-            $validator = $userIdValidator->validationDefault($validator);
-            $validator = $postTitleValidator->validationDefault($validator);
-            $validator = $postContentValidator->validationDefault($validator);
-            $validator = $imageValidator->validationDefault($validator);
-
-            $errors = $validator->errors($data);
+            // get validation errors
+            $errors = $createForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -150,17 +139,12 @@ class PostsController extends AppController
         if ($this->request->is('put')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $postIdValidator = new PostIdValidator();
-            $postTitleValidator = new PostTitleValidator();
-            $postContentValidator = new PostContentValidator();
-            $imageValidator = new ImageValidator();
+            // set form validators
+            $updateForm = new PostUpdateForm();
+            $updateForm->execute($data);
 
-            $validator = $postIdValidator->validationDefault($validator);
-            $validator = $postTitleValidator->notRequired($validator);
-            $validator = $postContentValidator->notRequired($validator);
-            $validator = $imageValidator->validationDefault($validator);
-            $errors = $validator->errors($data);
+            // get validation errors
+            $errors = $updateForm->getErrors();
 
             if ($errors) {
                 return $this->Rest->setUnprocessedResponse($errors);
@@ -204,10 +188,11 @@ class PostsController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $idValidator = new PostIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->postIdRequired(new Validator());
 
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -244,10 +229,11 @@ class PostsController extends AppController
         if ($this->request->is('get')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $idValidator = new PostIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->postIdRequired(new Validator());
 
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -255,7 +241,8 @@ class PostsController extends AppController
             }
 
             $post = $this->Posts->find()
-                ->where(['id' => $data['post_id']])
+                ->where(['Posts.id' => $data['post_id']])
+                ->contain(['Users', 'Comments'])
                 ->toArray();
 
             $response = $this->Rest->setSuccessResponse($post);
@@ -277,12 +264,11 @@ class PostsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $postIdValidator = new PostIdValidator();
-            $userIdValidator = new UserIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdAndPostIdRequired(new Validator());
 
-            $validator = $postIdValidator->validationDefault($validator);
-            $validator = $userIdValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -326,10 +312,11 @@ class PostsController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $idValidator = new LikeIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->likeIdRequired(new Validator());
 
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -366,12 +353,11 @@ class PostsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
-            $validator = new Validator();
-            $postIdValidator = new PostIdValidator();
-            $userIdValidator = new UserIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->userIdAndPostIdRequired(new Validator());
 
-            $validator = $postIdValidator->validationDefault($validator);
-            $validator = $userIdValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
@@ -415,10 +401,11 @@ class PostsController extends AppController
         if ($this->request->is('delete')) {
             $data = $this->request->query;
 
-            $validator = new Validator();
-            $idValidator = new RepostIdValidator();
+            // build form validators
+            $idForm = new CommonIdForm();
+            $validator = $idForm->repostIdRequired(new Validator());
 
-            $validator = $idValidator->validationDefault($validator);
+            // get error validations
             $errors = $validator->errors($data);
 
             if ($errors) {
