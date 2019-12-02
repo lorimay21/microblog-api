@@ -38,7 +38,7 @@ class PostCreateForm extends Form
         $validator = $userIdValidator->validationDefault($validator);
 
         $postTitleValidator = new PostTitleValidator();
-        $validator = $postTitleValidator->validationDefault($validator);
+        $validator = $postTitleValidator->notRequired($validator);
 
         $postContentValidator = new PostContentValidator();
         $validator = $postContentValidator->validationDefault($validator);

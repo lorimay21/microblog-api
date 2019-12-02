@@ -136,6 +136,8 @@ class RestComponent extends Component
      * @param array $data Response data.
      * @param string $messageId Response message id.
      * @param string $message Response message.
+     * 
+     * @return json
      */
     public function setResponse($status, $data, $messageId, $message)
     {
