@@ -8,7 +8,7 @@ use Cake\Controller\Component;
  * Rest component
  *
  * @property RequestHandlerComponent $RequestHandler
- * @property ResponseBuilderComponent $ResponseBuilder
+ * @property ResponseComponent $Response
  */
 class RestComponent extends Component
 {
@@ -19,7 +19,7 @@ class RestComponent extends Component
      */
     public $components = [
         'RequestHandler',
-        'ResponseBuilder'
+        'Response'
     ];
 
     /**
@@ -109,7 +109,7 @@ class RestComponent extends Component
         $messageId = 'UNPROCESSED_ENTITY_ERROR';
         $message = 'Invalid parameters';
 
-        $data = $this->ResponseBuilder->buildData($data);
+        $data = $this->Response->buildData($data);
 
         return $this->setResponse(422, $data, $messageId, $message);
     }

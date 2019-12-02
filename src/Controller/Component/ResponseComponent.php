@@ -7,7 +7,7 @@ use Cake\Controller\Component;
 /**
  * Rest Builder component
  */
-class ResponseBuilderComponent extends Component
+class ResponseComponent extends Component
 {
     /**
      * Reconstruct return data

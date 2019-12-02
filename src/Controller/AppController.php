@@ -51,7 +51,7 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
 
-        $this->loadComponent('ResponseBuilder');
+        $this->loadComponent('Response');
 
         $this->loadComponent('Rest');
 
